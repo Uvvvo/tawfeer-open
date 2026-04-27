@@ -7,8 +7,6 @@
 ## 🌟 Comprehensive Project Overview
 "Tawfeer" is an integrated financial management application designed to simplify personal financial planning. The app goes beyond simply tracking expenses; it extends into a comprehensive system that includes debt management, budgets, bank accounts, and Savings Challenges. The user interface was carefully designed to provide a smooth, modern experience with built-in Dark Mode support.
 
-> **Important Note:** This project was entirely programmed, designed, and developed personally by me, utilizing AI tools to assist with some programming complexities and accelerate the development process.
-
 ---
 
 ## ✨ Comprehensive Features
