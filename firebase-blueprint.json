@@ -1,0 +1,146 @@
+{
+  "entities": {
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A financial transaction record.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["income", "expense", "transfer"] },
+        "category": { "type": "string" },
+        "icon": { "type": "string" },
+        "color": { "type": "string" },
+        "isRecurring": { "type": "boolean" },
+        "frequency": { "type": "string", "enum": ["daily", "weekly", "monthly", "yearly"] },
+        "notes": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "accountId": { "type": "string" },
+        "toAccountId": { "type": "string" }
+      },
+      "required": ["title", "amount", "date", "type"]
+    },
+    "Goal": {
+      "title": "Savings Goal",
+      "description": "A goal for saving money.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "icon": { "type": "string" },
+        "color": { "type": "string" }
+      },
+      "required": ["title", "targetAmount", "currentAmount"]
+    },
+    "Budget": {
+      "title": "Budget",
+      "description": "A monthly budget limit for a category.",
+      "type": "object",
+      "properties": {
+        "categoryId": { "type": "string" },
+        "limit": { "type": "number" },
+        "period": { "type": "string", "enum": ["monthly"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["categoryId", "limit", "period"]
+    },
+    "Account": {
+      "title": "Account",
+      "description": "A bank account, wallet, or cash fund.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["cash", "bank", "wallet", "card"] },
+        "cardNetwork": { "type": "string", "enum": ["visa", "mastercard", "zaincash", "qicard", "other"] },
+        "last4": { "type": "string" },
+        "initialBalance": { "type": "number" },
+        "balance": { "type": "number" },
+        "color": { "type": "string" }
+      },
+      "required": ["name", "type", "balance", "color"]
+    },
+    "Debt": {
+      "title": "Debt",
+      "description": "A record of money owed or to be received.",
+      "type": "object",
+      "properties": {
+        "personName": { "type": "string" },
+        "amount": { "type": "number" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["owe", "owed"] },
+        "status": { "type": "string", "enum": ["active", "paid"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["personName", "amount", "type", "status", "createdAt"]
+    },
+    "SavingChallenge": {
+      "title": "Saving Challenge",
+      "description": "A challenge to save a specific amount over time.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "durationInWeeks": { "type": "number" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "completed"] }
+      },
+      "required": ["title", "targetAmount", "currentAmount", "durationInWeeks", "startDate", "status"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "An expense or income category.",
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "icon": { "type": "string" },
+        "color": { "type": "string" },
+        "bgColor": { "type": "string" },
+        "iconUrl": { "type": "string" }
+      },
+      "required": ["label", "color"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "User transactions"
+    },
+    "/users/{userId}/goals/{goalId}": {
+      "schema": "Goal",
+      "description": "User savings goals"
+    },
+    "/users/{userId}/budgets/{budgetId}": {
+      "schema": "Budget",
+      "description": "User category budgets"
+    },
+    "/users/{userId}/accounts/{accountId}": {
+      "schema": "Account",
+      "description": "User accounts"
+    },
+    "/users/{userId}/debts/{debtId}": {
+      "schema": "Debt",
+      "description": "User debts"
+    },
+    "/users/{userId}/challenges/{challengeId}": {
+      "schema": "SavingChallenge",
+      "description": "User saving challenges"
+    },
+    "/users/{userId}/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "User custom categories"
+    },
+    "/users/{userId}/autoCategories/{titleKey}": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "categoryId": { "type": "string" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "description": "Auto-categorization mappings"
+    }
+  }
+}

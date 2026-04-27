@@ -1,0 +1,24 @@
+{
+  "name": "Tawfeer",
+  "short_name": "Tawfeer",
+  "description": "تطبيق متكامل لإدارة مصروفاتك الشخصية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#16a34a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://ui-avatars.com/api/?name=Tawfeer&background=16a34a&color=fff&size=192",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://ui-avatars.com/api/?name=Tawfeer&background=16a34a&color=fff&size=512",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}

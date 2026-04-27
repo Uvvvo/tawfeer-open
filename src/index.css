@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&family=Almarai:wght@300;400;700;800&family=Amiri:wght@400;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --theme-primary: 99 102 241;
+  --theme-primary-light: 168 85 247;
+  --theme-font-sans: "Tajawal", ui-sans-serif, system-ui, sans-serif;
+  --theme-font-display: "Cairo", sans-serif;
+}
+
+@theme {
+  --font-sans: var(--theme-font-sans);
+  --font-display: var(--theme-font-display);
+
+  --color-primary: rgb(var(--theme-primary));
+  --color-primary-light: rgb(var(--theme-primary-light));
+  
+  --color-background: var(--bg-color);
+  --color-surface: var(--surface-color);
+  --color-on-surface: var(--on-surface-color);
+  --color-on-surface-variant: var(--on-surface-variant-color);
+  --color-glass-border: var(--glass-border-color);
+  --color-on-primary: #ffffff;
+  
+  --animate-spin-slow: spin 8s linear infinite;
+}
+
+:root {
+  --bg-color: #08080c;
+  --surface-color: rgba(255, 255, 255, 0.05);
+  --surface-color-solid: #12121a;
+  --on-surface-color: #ffffff;
+  --on-surface-variant-color: #9ca3af;
+  --glass-border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg-nav: rgba(8, 8, 12, 0.8);
+  --white-override: 255, 255, 255;
+}
+
+.light {
+  --bg-color: #f8fafc;
+  --surface-color: rgba(0, 0, 0, 0.05); 
+  --surface-color-solid: #e2e8f0;
+  --on-surface-color: #0f172a;
+  --on-surface-variant-color: #475569;
+  --glass-border-color: rgba(0, 0, 0, 0.1);
+  --glass-bg-nav: rgba(248, 250, 252, 0.8);
+  --white-override: 0, 0, 0; 
+}
+
+.dark {
+  --bg-color: #08080c;
+  --surface-color: rgba(255, 255, 255, 0.05);
+  --surface-color-solid: #12121a;
+  --on-surface-color: #ffffff;
+  --on-surface-variant-color: #9ca3af;
+  --glass-border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg-nav: rgba(8, 8, 12, 0.8);
+  --white-override: 255, 255, 255;
+}
+
+/* Overrides for hardcoded utility classes in Light Mode */
+.light .bg-white\/2 { background-color: rgba(0, 0, 0, 0.02) !important; }
+.light .bg-white\/5 { background-color: rgba(0, 0, 0, 0.05) !important; }
+.light .bg-white\/10 { background-color: rgba(0, 0, 0, 0.1) !important; }
+.light .bg-white\/20 { background-color: rgba(0, 0, 0, 0.2) !important; }
+.light .bg-background\/30 { background-color: rgba(248, 250, 252, 0.3) !important; }
+.light .bg-background\/50 { background-color: rgba(248, 250, 252, 0.5) !important; }
+.light .border-white\/5 { border-color: rgba(0, 0, 0, 0.05) !important; }
+.light .border-white\/10 { border-color: rgba(0, 0, 0, 0.1) !important; }
+.light .border-white\/20 { border-color: rgba(0, 0, 0, 0.2) !important; }
+.light .ring-white\/20 { --tw-ring-color: rgba(0, 0, 0, 0.2) !important; }
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-sans transition-all duration-500 ease-in-out;
+    direction: rtl;
+    overflow-x: hidden;
+  }
+}
+
+.immersive-gradient {
+  background: linear-gradient(135deg, rgb(var(--theme-primary)) 0%, rgb(var(--theme-primary-light)) 100%);
+}
+
+.glass-card {
+  background-color: var(--surface-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border-color);
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.nav-glass {
+  background-color: var(--glass-bg-nav);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--glass-border-color);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.bg-glow {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(63, 94, 251, 0.1) 0%, rgba(252, 70, 107, 0) 70%);
+  top: -150px;
+  right: -150px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.bg-glow-bottom {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(156, 39, 176, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+  bottom: -100px;
+  left: -100px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

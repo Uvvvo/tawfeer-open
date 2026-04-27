@@ -1,0 +1,179 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Phase 3: Primitive Definition
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity Validations (Pillar 2: The Anti-Update-Gap)
+    // - Always check key boundaries using size()
+    // - Enforce type and size limits
+
+    function isValidTransaction(data, isCreate) {
+      let validKeys = ['title', 'amount', 'date', 'type', 'category', 'icon', 'color', 'isRecurring', 'frequency', 'notes', 'tags', 'accountId', 'toAccountId'];
+      return (isCreate ? data.keys().hasAny(['title', 'amount', 'date', 'type']) : true)
+          && (data.get('title', 'a') is string && data.get('title', 'a').size() <= 200)
+          && (data.get('amount', 0) is number)
+          && (data.get('date', '1') is string && data.get('date', '1').size() <= 128)
+          && (data.get('type', 'income') in ['income', 'expense', 'transfer'])
+          && (data.get('category', null) == null || (data.get('category', 'a') is string && data.get('category', 'a').size() <= 100))
+          && (data.get('icon', null) == null || (data.get('icon', 'a') is string && data.get('icon', 'a').size() <= 100))
+          && (data.get('color', null) == null || (data.get('color', 'a') is string && data.get('color', 'a').size() <= 100))
+          && (data.get('notes', null) == null || (data.get('notes', 'a') is string && data.get('notes', 'a').size() <= 1000))
+          && (data.get('tags', null) == null || (data.get('tags', []) is list && data.get('tags', []).size() <= 20))
+          && (data.get('accountId', null) == null || (data.get('accountId', 'a') is string && data.get('accountId', 'a').size() <= 128))
+          && (data.get('toAccountId', null) == null || (data.get('toAccountId', 'a') is string && data.get('toAccountId', 'a').size() <= 128));
+    }
+
+    function isValidGoal(data, isCreate) {
+      return (isCreate ? data.keys().hasAny(['title', 'targetAmount', 'currentAmount']) : true)
+          && (data.get('title', 'a') is string && data.get('title', 'a').size() <= 200)
+          && (data.get('targetAmount', 0) is number)
+          && (data.get('currentAmount', 0) is number)
+          && (data.get('icon', null) == null || (data.get('icon', 'a') is string && data.get('icon', 'a').size() <= 100))
+          && (data.get('color', null) == null || (data.get('color', 'a') is string && data.get('color', 'a').size() <= 100));
+    }
+
+    function isValidBudget(data, isCreate) {
+      return (isCreate ? data.keys().hasAny(['categoryId', 'limit', 'period']) : true)
+          && (data.get('categoryId', 'a') is string && data.get('categoryId', 'a').size() <= 128)
+          && (data.get('limit', 0) is number)
+          && (data.get('period', 'monthly') == 'monthly')
+          && (data.get('createdAt', null) == null || typeof(data.get('createdAt', '')) in ['string', 'timestamp']);
+    }
+
+    function isValidAccount(data, isCreate) {
+      return (isCreate ? data.keys().hasAny(['name', 'type', 'balance', 'color']) : true)
+          && (data.get('name', 'a') is string && data.get('name', 'a').size() <= 200)
+          && (data.get('type', 'cash') in ['cash', 'bank', 'wallet', 'card'])
+          && (data.get('balance', 0) is number)
+          && (data.get('color', 'a') is string && data.get('color', 'a').size() <= 100)
+          && (data.get('initialBalance', null) == null || data.get('initialBalance', 0) is number)
+          && (data.get('cardNetwork', null) == null || data.get('cardNetwork', 'a') is string && data.get('cardNetwork', 'a').size() <= 50)
+          && (data.get('last4', null) == null || data.get('last4', 'a') is string && data.get('last4', 'a').size() <= 50);
+    }
+
+    function isValidDebt(data, isCreate) {
+      return (isCreate ? data.keys().hasAny(['personName', 'amount', 'type', 'status']) : true)
+          && (data.get('personName', 'a') is string && data.get('personName', 'a').size() <= 200)
+          && (data.get('amount', 0) is number)
+          && (data.get('paidAmount', null) == null || data.get('paidAmount', 0) is number)
+          && (data.get('type', 'owe') in ['owe', 'owed'])
+          && (data.get('status', 'active') in ['active', 'paid'])
+          && (data.get('description', null) == null || (data.get('description', 'a') is string && data.get('description', 'a').size() <= 1000))
+          && (data.get('dueDate', null) == null || typeof(data.get('dueDate', '')) in ['string', 'timestamp'])
+          && (data.get('createdAt', null) == null || typeof(data.get('createdAt', '')) in ['string', 'timestamp']);
+    }
+
+    function isValidChallenge(data, isCreate) {
+      return (isCreate ? data.keys().hasAny(['title', 'targetAmount', 'currentAmount', 'durationInWeeks', 'status']) : true)
+          && (data.get('title', 'a') is string && data.get('title', 'a').size() <= 200)
+          && (data.get('targetAmount', 0) is number)
+          && (data.get('currentAmount', 0) is number)
+          && (data.get('durationInWeeks', 0) is number)
+          && (data.get('status', 'active') in ['active', 'completed'])
+          && (data.get('startDate', null) == null || typeof(data.get('startDate', '')) in ['string', 'timestamp']);
+    }
+
+    function isValidCategory(data, isCreate) {
+      return (isCreate ? data.keys().hasAny(['label', 'color']) : true)
+          && (data.get('label', 'a') is string && data.get('label', 'a').size() <= 100)
+          && (data.get('color', 'a') is string && data.get('color', 'a').size() <= 100)
+          && (data.get('icon', null) == null || (data.get('icon', 'a') is string && data.get('icon', 'a').size() <= 100))
+          && (data.get('bgColor', null) == null || (data.get('bgColor', 'a') is string && data.get('bgColor', 'a').size() <= 100))
+          && (data.get('iconUrl', null) == null || (data.get('iconUrl', 'a') is string && data.get('iconUrl', 'a').size() <= 1000));
+    }
+
+    // User Data Path
+    match /users/{userId} {
+      allow get, write: if isOwner(userId);
+      
+      match /transactions/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id) && isValidTransaction(incoming(), true);
+        allow update: if isOwner(userId) && isValidId(id) && isValidTransaction(incoming(), false) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'amount', 'date', 'type', 'category', 'icon', 'color', 'isRecurring', 'frequency', 'notes', 'tags', 'accountId', 'toAccountId']);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+
+      match /goals/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id) && isValidGoal(incoming(), true);
+        allow update: if isOwner(userId) && isValidId(id) && isValidGoal(incoming(), false) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'targetAmount', 'currentAmount', 'icon', 'color']);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+
+      match /budgets/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id) && isValidBudget(incoming(), true);
+        allow update: if isOwner(userId) && isValidId(id) && isValidBudget(incoming(), false) && incoming().diff(existing()).affectedKeys().hasOnly(['categoryId', 'limit', 'period', 'createdAt']);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+
+      match /accounts/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id) && isValidAccount(incoming(), true);
+        allow update: if isOwner(userId) && isValidId(id) && isValidAccount(incoming(), false) && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'type', 'balance', 'color', 'initialBalance', 'cardNetwork', 'last4']);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+
+      match /debts/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id) && isValidDebt(incoming(), true);
+        allow update: if isOwner(userId) && isValidId(id) && isValidDebt(incoming(), false) && incoming().diff(existing()).affectedKeys().hasOnly(['personName', 'amount', 'paidAmount', 'type', 'status', 'description', 'dueDate', 'createdAt']);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+
+      match /challenges/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id) && isValidChallenge(incoming(), true);
+        allow update: if isOwner(userId) && isValidId(id) && isValidChallenge(incoming(), false) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'targetAmount', 'currentAmount', 'durationInWeeks', 'status', 'startDate']);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+
+      match /categories/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id) && isValidCategory(incoming(), true);
+        allow update: if isOwner(userId) && isValidId(id) && isValidCategory(incoming(), false) && incoming().diff(existing()).affectedKeys().hasOnly(['label', 'color', 'icon', 'bgColor', 'iconUrl']);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+
+      match /autoCategories/{id} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId) && isValidId(id);
+        allow create: if isOwner(userId) && isValidId(id);
+        allow update: if isOwner(userId) && isValidId(id);
+        allow delete: if isOwner(userId) && isValidId(id);
+      }
+    }
+  }
+}
+

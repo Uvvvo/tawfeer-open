@@ -1,0 +1,6 @@
+{
+  "name": "Tawfeer Financial (توفير)",
+  "description": "تطبيق مالي شخصي متطور لإدارة الميزانية، تتبع المصاريف، وتحقيق أهداف الادخار بواجهة عصرية وسهلة الاستخدام.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": []
+}
