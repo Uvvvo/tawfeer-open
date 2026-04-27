@@ -1,6 +1,8 @@
 # 🏦 Tawfeer (Financial App)
 
-![Home](Images/Home.jpg)
+<p align="center">
+  <img src="Images/Home.jpg" alt="Home" width="300" />
+</p>
 
 ## 🌟 Comprehensive Project Overview
 "Tawfeer" is an integrated financial management application designed to simplify personal financial planning. The app goes beyond simply tracking expenses; it extends into a comprehensive system that includes debt management, budgets, bank accounts, and Savings Challenges. The user interface was carefully designed to provide a smooth, modern experience with built-in Dark Mode support.
@@ -49,34 +51,46 @@ The project was built using the latest Frontend and Backend technologies to ensu
 
 ### 🔐 Login and Getting Started
 The app starts with a Splash screen, followed by the login and registration interface, which supports email and Google accounts.
-![Splash](Images/splash.jpg)
-![Login](Images/Login.jpg)
-![Signin](Images/Signin.jpg)
+<p align="center">
+  <img src="Images/splash.jpg" alt="Splash" width="250" />
+  <img src="Images/Login.jpg" alt="Login" width="250" />
+  <img src="Images/Signin.jpg" alt="Signin" width="250" />
+</p>
 
 ### 💰 Expense and Budget Management
 When adding a new expense, you can choose the category, the account it's withdrawn from, and the operation classification. Budgets update instantly and show you the consumption percentage visually.
-![New Expense](Images/new%20expense.jpg)
-![Expenses](Images/Expenses.jpg)
-![Budget](Images/Budget.jpg)
+<p align="center">
+  <img src="Images/new%20expense.jpg" alt="New Expense" width="250" />
+  <img src="Images/Expenses.jpg" alt="Expenses" width="250" />
+  <img src="Images/Budget.jpg" alt="Budget" width="250" />
+</p>
 
 ### 📈 Advanced Financial Reports
 All data is aggregated and displayed on the reports page, where you can filter data by dates and monitor Cash Flow.
-![Financial Reports](Images/Financial_Reports.jpg)
-![Financial Statements](Images/Financial%20Statements.jpg)
+<p align="center">
+  <img src="Images/Financial_Reports.jpg" alt="Financial Reports" width="250" />
+  <img src="Images/Financial%20Statements.jpg" alt="Financial Statements" width="250" />
+</p>
 
 ### 🎯 Savings Goals
 Set financial goals and follow the progress bar for each goal until it's completed.
-![Savings](Images/Savings.jpg)
+<p align="center">
+  <img src="Images/Savings.jpg" alt="Savings" width="250" />
+</p>
 
 ### 🤝 Debts and Liabilities
 A clean interface to know who you owe and who owes you, with a quick button to log a payment when a debt is settled.
-![Debts and Liabilities](Images/Debts%20and%20Liabilities.jpg)
+<p align="center">
+  <img src="Images/Debts%20and%20Liabilities.jpg" alt="Debts and Liabilities" width="250" />
+</p>
 
 ### ⚙️ Settings and Dropdown Menus
 A comprehensive settings system that allows adjusting the currency, dark/light mode, and modifying the personal account.
-![Drop-down menu](Images/Drop-down%20menu.jpg)
-![Settings](Images/Settings.jpg)
-![Developer](Images/Developer.jpg)
+<p align="center">
+  <img src="Images/Drop-down%20menu.jpg" alt="Drop-down menu" width="250" />
+  <img src="Images/Settings.jpg" alt="Settings" width="250" />
+  <img src="Images/Developer.jpg" alt="Developer" width="250" />
+</p>
 
 ---
 
